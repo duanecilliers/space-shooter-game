@@ -8,8 +8,8 @@ import gameConfig from 'configs/gameConfig'
 const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
-  let ship: Phaser.GameObjects.Sprite
-
+  let ship: Phaser.Physics.Arcade.Sprite
+  let cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
@@ -18,11 +18,13 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   function create () {
     const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
 
-    ship = scene.add.sprite(VIEWWIDTH / 2,VIEWHEIGHT - 50,spriteConfig.PLAYER_SHIP.KEY, 0)
+    ship = scene.physics.add.sprite(VIEWWIDTH / 2,VIEWHEIGHT - 50, spriteConfig.PLAYER_SHIP.KEY)
       .setScale(2)
 
     const animations = createAnimations()
     ship.anims.play(animations.straightAnimation)
+
+    cursorKeys = scene.input.keyboard.createCursorKeys()
   }
 
   /**
@@ -43,8 +45,23 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     }
   }
 
+  function playerMoveManager () {
+    const { left, right, up, down } = cursorKeys
+    const { SPEED } = gameConfig.PLAYER
+
+    if (left.isDown) {
+      ship.setVelocityX(-SPEED)
+    } else if (right.isDown) {
+      ship.setVelocityX(SPEED)
+    } else if (up.isDown) {
+      ship.setVelocityY(-SPEED)
+    } else if (down.isDown) {
+      ship.setVelocityY(SPEED)
+    }
+  }
+
   function update () {
-    console.log('update')
+    playerMoveManager()
   }
 
   // functions and properties listed here will be public.

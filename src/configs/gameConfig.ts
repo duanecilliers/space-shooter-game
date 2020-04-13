@@ -28,6 +28,9 @@ export interface IGameConfig {
     musicKeys: string[];
     sfxKeys: string[];
   };
+  PLAYER: {
+    SPEED: number;
+  };
   KEYS: {
     LEFT_ARROW: IKey;
     UP_ARROW: IKey;
@@ -70,6 +73,9 @@ const gameConfig: IGameConfig = {
   AUDIO: {
     musicKeys: ['bgScore'],
     sfxKeys: ['coinSfx'],
+  },
+  PLAYER: {
+    SPEED: 300
   },
   KEYS: {
     LEFT_ARROW: {
