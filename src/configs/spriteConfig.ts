@@ -13,6 +13,10 @@ import speaker from 'assets/images/speaker.png'
 interface ISprite {
   KEY: string;
   PATH: string;
+  FRAME_CONFIG?: {
+    frameWidth: number;
+    frameHeight: number;
+  }
 }
 
 interface ISpriteConfig {
@@ -52,19 +56,35 @@ const spriteConfig: ISpriteConfig = {
   },
   PLAYER_SHIP: {
     KEY: 'playerShip',
-    PATH: playerShip
+    PATH: playerShip,
+    FRAME_CONFIG: {
+      frameWidth: 16,
+      frameHeight: 24
+    }
   },
   ENEMY_SMALL: {
     KEY: 'enemySmall',
-    PATH: enemySmall
+    PATH: enemySmall,
+    FRAME_CONFIG: {
+      frameWidth: 16,
+      frameHeight: 16
+    }
   },
   ENEMY_MEDIUM: {
     KEY: 'enemyMedium',
-    PATH: enemyMedium
+    PATH: enemyMedium,
+    FRAME_CONFIG: {
+      frameWidth: 32,
+      frameHeight: 16
+    }
   },
   ENEMY_BIG: {
     KEY: 'enemyBig',
-    PATH: enemyBig
+    PATH: enemyBig,
+    FRAME_CONFIG: {
+      frameWidth: 32,
+      frameHeight: 32
+    }
   },
   SPEAKER: {
     KEY: 'speaker',
