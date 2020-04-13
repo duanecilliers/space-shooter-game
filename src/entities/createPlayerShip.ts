@@ -24,6 +24,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     const animations = createAnimations()
     ship.anims.play(animations.straightAnimation)
 
+    ship.setCollideWorldBounds(true)
     cursorKeys = scene.input.keyboard.createCursorKeys()
   }
 
