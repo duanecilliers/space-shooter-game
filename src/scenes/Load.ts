@@ -23,15 +23,29 @@ const LoadScene = function LoadSceneFunc() {
     })
   }
 
-  function loadSpritesheets() { }
+  function loadSpritesheets() {
+    const scene: Phaser.Scene = state.getScene()
+    Object.keys(spriteConfig)
+      .filter(key => spriteConfig[key].FRAME_CONFIG !== undefined)
+      .map(key => {
+        console.log('key', key)
+        return key
+      })
+      .forEach(key => {
+        const SPRITE = spriteConfig[key]
+        scene.load.spritesheet(SPRITE.KEY, SPRITE.PATH, SPRITE.FRAME_CONFIG)
+      })
+  }
 
   function loadMaps() { }
 
   function loadImages() {
-    Object.keys(spriteConfig).forEach((objKey) => {
-      const SPRITE = spriteConfig[objKey]
-      state.getScene().load.image(SPRITE.KEY, SPRITE.PATH)
-    })
+    Object.keys(spriteConfig)
+      .filter(key => spriteConfig[key].FRAME_CONFIG === undefined)
+      .forEach((objKey) => {
+        const SPRITE = spriteConfig[objKey]
+        state.getScene().load.image(SPRITE.KEY, SPRITE.PATH)
+      })
   }
 
   function loadAssets() {
