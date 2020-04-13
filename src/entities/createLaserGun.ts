@@ -10,7 +10,7 @@ const createLaserGun = function createLaserGunFunc(
 ) {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
-  let beam: Phaser.Physics.Arcade.Sprite
+  const beams: Phaser.Physics.Arcade.Sprite[] = []
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
@@ -41,13 +41,19 @@ const createLaserGun = function createLaserGunFunc(
     y: number,
     type: 'ball' | 'beam' = 'ball'
   ) {
-    beam = scene.physics.add.sprite(x, y, spriteConfig.LASER_BOLTS.KEY)
+    const beam: Phaser.Physics.Arcade.Sprite = scene.physics.add.sprite(x, y, spriteConfig.LASER_BOLTS.KEY)
     beam.anims.play(type)
     scene.physics.world.enableBody(beam)
     beam.setVelocityY(-250)
+    beams.push(beam)
   }
 
   function update () {
+    // cleanup beams
+    if (beams.length > 0 && beams[0].y < 32) {
+      beams.shift()
+      console.log('beams', beams)
+    }
   }
 
   // functions and properties listed here will be public.

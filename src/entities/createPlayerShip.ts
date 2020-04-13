@@ -85,6 +85,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
 
   function update () {
     shootBeam()
+    gun.update()
     playerMoveManager()
   }
 
