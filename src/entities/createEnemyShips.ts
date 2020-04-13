@@ -83,7 +83,7 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     ship.disableBody()
     scene.tweens.add({
       targets: ship,
-      duration: 500,
+      duration: 200,
       angle: Math.random() > .5 ? 30 : -30,
       x: ship.x - 10,
       y: ship.y - 10,
