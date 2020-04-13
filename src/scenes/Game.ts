@@ -68,11 +68,15 @@ const Game = function GameFunc() {
 
     const scene: Phaser.Scene = state.getScene()
 
+    // projectiles and powerUps collission
     powerUps = powerUpsEntity.getPowerUps()
     projectiles = player.getProjectiles()
     scene.physics.add.collider(projectiles, powerUps, (projectile, powerUp) => {
       projectile.destroy()
     })
+
+    // player and powerUps
+    scene.physics.add.overlap(player.getShip(), powerUps, player.consumePowerUp)
   }
 
   function update(time, delta) {

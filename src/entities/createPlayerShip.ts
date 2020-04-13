@@ -92,6 +92,14 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     return projectiles
   }
 
+  function getShip () {
+    return ship
+  }
+
+  function consumePowerUp(player, powerUp) {
+    powerUp.destroy()
+  }
+
   function update () {
     shootBeam()
     gun.update()
@@ -106,7 +114,9 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     create,
     update,
     printInfo,
-    getProjectiles
+    getProjectiles,
+    getShip,
+    consumePowerUp
   }
 
   // These are the substates, or components, that describe the functionality of the resulting object.
