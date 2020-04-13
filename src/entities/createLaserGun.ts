@@ -6,7 +6,8 @@ import spriteConfig from 'configs/spriteConfig'
 import gameConfig from 'configs/gameConfig'
 
 const createLaserGun = function createLaserGunFunc(
-  scene: Phaser.Scene
+  scene: Phaser.Scene,
+  projectiles: Phaser.Physics.Arcade.Group
 ) {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
@@ -43,9 +44,11 @@ const createLaserGun = function createLaserGunFunc(
   ) {
     const beam: Phaser.Physics.Arcade.Sprite = scene.physics.add.sprite(x, y, spriteConfig.LASER_BOLTS.KEY)
     beam.anims.play(type)
+    projectiles.add(beam)
     scene.physics.world.enableBody(beam)
     beam.setVelocityY(-250)
     beams.push(beam)
+    return beam
   }
 
   function update () {

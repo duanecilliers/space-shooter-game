@@ -43,6 +43,10 @@ const createPowerUps = function createPowerUpsFunc(scene: Phaser.Scene) {
     })
   }
 
+  function getPowerUps () {
+    return powerUps
+  }
+
   function createAnimation (key: string, frames) {
     scene.anims.create({
       key,
@@ -64,6 +68,7 @@ const createPowerUps = function createPowerUpsFunc(scene: Phaser.Scene) {
     create,
     update,
     printInfo,
+    getPowerUps
   }
 
   // These are the substates, or components, that describe the functionality of the resulting object.

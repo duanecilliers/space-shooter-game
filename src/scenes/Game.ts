@@ -20,7 +20,9 @@ const Game = function GameFunc() {
   let UIScene
   let background
   let player
+  let powerUpsEntity
   let powerUps
+  let projectiles
   let enemyShips
 
   function _setupCamera () {
@@ -34,6 +36,11 @@ const Game = function GameFunc() {
     background.create()
   }
 
+  function _createPowerUps() {
+    powerUpsEntity = createPowerUps(state.getScene())
+    powerUpsEntity.create()
+  }
+
   function _createPlayer () {
     player = createPlayerShip(state.getScene())
     player.create()
@@ -42,11 +49,6 @@ const Game = function GameFunc() {
   function _createEnemies () {
     enemyShips = createEnemyShips(state.getScene())
     enemyShips.create()
-  }
-
-  function _createPowerUps () {
-    powerUps = createPowerUps(state.getScene())
-    powerUps.create()
   }
 
   function init() {
@@ -59,10 +61,18 @@ const Game = function GameFunc() {
   function create() {
     audioManager.playMusic()
     _createBackground()
+    _createPowerUps()
     _createPlayer()
     _createEnemies()
-    _createPowerUps()
     _setupCamera()
+
+    const scene: Phaser.Scene = state.getScene()
+
+    powerUps = powerUpsEntity.getPowerUps()
+    projectiles = player.getProjectiles()
+    scene.physics.add.collider(projectiles, powerUps, (projectile, powerUp) => {
+      projectile.destroy()
+    })
   }
 
   function update(time, delta) {

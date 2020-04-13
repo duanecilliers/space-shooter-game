@@ -13,6 +13,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   let cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys
   let spacebar
   let gun
+  let projectiles: Phaser.Physics.Arcade.Group
   let animations: {
     straightAnimation: string;
   }
@@ -23,6 +24,8 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
 
   function create () {
     const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
+
+    projectiles = scene.physics.add.group()
 
     ship = scene.physics.add.sprite(VIEWWIDTH / 2,VIEWHEIGHT - 50, spriteConfig.PLAYER_SHIP.KEY)
       .setScale(2)
@@ -38,7 +41,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     /**
      * @todo Rename beam gun
      */
-    gun = createLaserBeam(scene)
+    gun = createLaserBeam(scene, projectiles)
     gun.create()
   }
 
@@ -81,8 +84,12 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   function shootBeam () {
     if (Phaser.Input.Keyboard.JustDown(spacebar)) {
       /** @todo add modifer for beam? */
-      gun.shoot(ship.x, ship.y, Math.random() > 0.5 ? 'ball' : 'beam')
+      const beam = gun.shoot(ship.x, ship.y, Math.random() > 0.5 ? 'ball' : 'beam')
     }
+  }
+
+  function getProjectiles () {
+    return projectiles
   }
 
   function update () {
@@ -99,6 +106,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     create,
     update,
     printInfo,
+    getProjectiles
   }
 
   // These are the substates, or components, that describe the functionality of the resulting object.
