@@ -35,7 +35,7 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     const randomIndex = Math.floor(Math.random() * types.length)
     const randomX = Phaser.Math.Between(0, gameConfig.GAME.VIEWWIDTH)
     const randomY = Phaser.Math.Between(-30, 200)
-    const ship = scene.add.sprite(randomX, randomY, types[randomIndex].KEY, 0)
+    const ship = scene.physics.add.sprite(randomX, randomY, types[randomIndex].KEY, 0)
       .setScale(2)
     enemies.add(ship)
     createAnimation(ship, types[randomIndex])
