@@ -73,6 +73,8 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
       ship.setVelocityY(-SPEED)
     } else if (down.isDown) {
       ship.setVelocityY(SPEED)
+    } else {
+      ship.setVelocity(0, 0)
     }
   }
 
