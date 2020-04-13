@@ -3,6 +3,10 @@ import stars from 'assets/images/background/stars.png'
 import planet from 'assets/images/background/planet.png'
 import planet2 from 'assets/images/background/planet2.png'
 import planetCluser from 'assets/images/background/planet-cluster.png'
+import playerShip from 'assets/images/ship.png'
+import enemySmall from 'assets/images/enemy-small.png'
+import enemyMedium from 'assets/images/enemy-medium.png'
+import enemyBig from 'assets/images/enemy-big.png'
 import spreakerOff from 'assets/images/speaker-off.png'
 import speaker from 'assets/images/speaker.png'
 
@@ -17,6 +21,10 @@ interface ISpriteConfig {
   PLANET: ISprite,
   PLANET2: ISprite,
   PLANET_CLUSTER: ISprite,
+  PLAYER_SHIP: ISprite,
+  ENEMY_SMALL: ISprite,
+  ENEMY_MEDIUM: ISprite,
+  ENEMY_BIG: ISprite,
   SPEAKER: ISprite;
   SPEAKER_OFF: ISprite;
 }
@@ -41,6 +49,22 @@ const spriteConfig: ISpriteConfig = {
   PLANET_CLUSTER: {
     KEY: 'planetCluser',
     PATH: planetCluser
+  },
+  PLAYER_SHIP: {
+    KEY: 'playerShip',
+    PATH: playerShip
+  },
+  ENEMY_SMALL: {
+    KEY: 'enemySmall',
+    PATH: enemySmall
+  },
+  ENEMY_MEDIUM: {
+    KEY: 'enemyMedium',
+    PATH: enemyMedium
+  },
+  ENEMY_BIG: {
+    KEY: 'enemyBig',
+    PATH: enemyBig
   },
   SPEAKER: {
     KEY: 'speaker',
