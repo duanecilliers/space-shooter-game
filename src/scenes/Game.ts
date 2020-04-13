@@ -75,6 +75,9 @@ const Game = function GameFunc() {
       projectile.destroy()
     })
 
+    // Player and enemy ship collission
+    scene.physics.add.overlap(player.getShip(), enemyShips.getShips(), player.onCollission)
+
     // player and powerUps
     scene.physics.add.overlap(player.getShip(), powerUps, player.consumePowerUp)
 

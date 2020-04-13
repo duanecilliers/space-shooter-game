@@ -5,6 +5,7 @@ import createState from 'utils/createState'
 import spriteConfig from 'configs/spriteConfig'
 import gameConfig from 'configs/gameConfig'
 import createLaserBeam from './createLaserGun'
+import createExplosion from './createExplosion'
 
 const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   // variables and functions here are private unless listed below in localState.
@@ -14,20 +15,27 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   let spacebar
   let gun
   let projectiles: Phaser.Physics.Arcade.Group
+  let explosion
   let animations: {
     straightAnimation: string;
   }
+
+  const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
+
+  const spawnPosition = { x: VIEWWIDTH / 2, y: VIEWHEIGHT - 50 }
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
   }
 
   function create () {
-    const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
-
     projectiles = scene.physics.add.group()
 
-    ship = scene.physics.add.sprite(VIEWWIDTH / 2,VIEWHEIGHT - 50, spriteConfig.PLAYER_SHIP.KEY)
+    // Create explosion state
+    explosion = createExplosion(scene)
+    explosion.create()
+
+    ship = scene.physics.add.sprite(spawnPosition.x, spawnPosition.y, spriteConfig.PLAYER_SHIP.KEY)
       .setScale(2)
 
     animations = createAnimations()
@@ -104,6 +112,27 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     projectile.destroy()
   }
 
+  /** @todo create a coinFlip util, using it a lot - `Math.random() > .5` */
+  function onCollission () {
+    console.log('collision')
+    explosion.explode(ship.x, ship.y)
+    ship.disableBody()
+    scene.tweens.add({
+      targets: ship,
+      duration: 300,
+      y: ship.y + 60,
+      angle: Math.random() > .5 ? -45 : 45,
+      alpha: 0.3,
+      x: Math.random() > .5 ? ship.x + 30 : ship.x - 30,
+      onComplete: () => {
+        ship.enableBody(true, spawnPosition.x, spawnPosition.y, true, true)
+        ship.alpha = 1
+        ship.angle = 0
+      }
+    })
+
+  }
+
   function update () {
     shootBeam()
     gun.update()
@@ -121,7 +150,8 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
     getProjectiles,
     getShip,
     consumePowerUp,
-    handleEnemyDestruction
+    handleEnemyDestruction,
+    onCollission
   }
 
   // These are the substates, or components, that describe the functionality of the resulting object.
