@@ -9,6 +9,7 @@ import enemyMedium from 'assets/images/enemy-medium.png'
 import enemyBig from 'assets/images/enemy-big.png'
 import explosion from 'assets/images/explosion.png'
 import powerUps from 'assets/images/power-up.png'
+import laserBolts from 'assets/images/laser-bolts.png'
 import spreakerOff from 'assets/images/speaker-off.png'
 import speaker from 'assets/images/speaker.png'
 
@@ -33,6 +34,7 @@ interface ISpriteConfig {
   ENEMY_BIG: ISprite,
   EXPLOSION: ISprite,
   POWER_UPS: ISprite;
+  LASER_BOLTS: ISprite;
   SPEAKER: ISprite;
   SPEAKER_OFF: ISprite;
 }
@@ -101,6 +103,14 @@ const spriteConfig: ISpriteConfig = {
   POWER_UPS: {
     KEY: 'powerUps',
     PATH: powerUps,
+    FRAME_CONFIG: {
+      frameWidth: 16,
+      frameHeight: 16
+    }
+  },
+  LASER_BOLTS: {
+    KEY: 'laserBolts',
+    PATH: laserBolts,
     FRAME_CONFIG: {
       frameWidth: 16,
       frameHeight: 16
