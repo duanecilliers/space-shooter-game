@@ -27,17 +27,16 @@ const Game = function GameFunc() {
   }
 
   function createPlayer () {
-    const playerState = createPlayerShip()
-    playerState.create(state.getScene())
+    const scene = state.getScene()
+    const playerState = createPlayerShip(scene)
+    playerState.create(scene)
     playerState.setPosition({ x: 200, y: 200 })
-    // console.log('playerState', playerState)
   }
 
   function createEnemies () {
     const scene = state.getScene()
     enemyShips = createEnemyShips(scene)
     enemyShips.create(scene)
-    // console.log('enemyState', enemyState)
   }
 
   function init() {
