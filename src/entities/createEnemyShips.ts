@@ -1,4 +1,4 @@
-import { range, empty } from 'ramda'
+import { range, move } from 'ramda'
 import isGameEntity from 'components/entities/isGameEntity'
 import createExplosion from 'entities/createExplosion'
 import canEmit from 'components/events/canEmit'
@@ -12,9 +12,8 @@ interface ISprite extends Phaser.GameObjects.Sprite {}
 const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
-  let enemySmall: ISprite
-  let enemyMedium: ISprite
-  let enemyBig: ISprite
+  const concurrentShips = 3
+  const speed = 2
   let enemies: Phaser.Physics.Arcade.Group
   let explosion
 
@@ -24,26 +23,22 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
 
   function create () {
     enemies = scene.physics.add.group()
-    enemySmall = scene.add.sprite(150, 200, spriteConfig.ENEMY_SMALL.KEY, 0)
-      .setScale(2)
 
-    enemyMedium = scene.add.sprite(300, 200, spriteConfig.ENEMY_MEDIUM.KEY, 0)
-      .setScale(2)
-
-    enemyBig = scene.add.sprite(450, 200, spriteConfig.ENEMY_BIG.KEY, 0)
-      .setScale(2)
-
-    enemies.add(enemySmall)
-    enemies.add(enemyMedium)
-    enemies.add(enemyBig)
-
-    createAnimation(enemySmall, spriteConfig.ENEMY_SMALL)
-    createAnimation(enemyMedium, spriteConfig.ENEMY_MEDIUM)
-    createAnimation(enemyBig, spriteConfig.ENEMY_BIG)
-    createAnimation(enemyBig, spriteConfig.EXPLOSION, false, { repeat: 0, hideOnComplete: true })
+    range(0, concurrentShips).forEach(createShip)
 
     explosion = createExplosion(scene)
     explosion.create()
+  }
+
+  function createShip () {
+    const types = [spriteConfig.ENEMY_SMALL, spriteConfig.ENEMY_MEDIUM, spriteConfig.ENEMY_BIG]
+    const randomIndex = Math.floor(Math.random() * types.length)
+    const randomX = Phaser.Math.Between(0, gameConfig.GAME.VIEWWIDTH)
+    const randomY = Phaser.Math.Between(-30, 200)
+    const ship = scene.add.sprite(randomX, randomY, types[randomIndex].KEY, 0)
+      .setScale(2)
+    enemies.add(ship)
+    createAnimation(ship, types[randomIndex])
   }
 
   function createAnimation(
@@ -65,7 +60,7 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     }
   }
 
-  function moveShip(ship: ISprite, speed: number) {
+  function moveShip(ship: any, speed: number) {
     ship.y += speed
     if (ship.y > gameConfig.GAME.VIEWHEIGHT) {
       // set random delay
@@ -77,12 +72,6 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     // console.log('resetShipPos', scene)
     ship.y = -(Phaser.Math.Between(50, 300))
     ship.x = Phaser.Math.Between(0, gameConfig.GAME.VIEWWIDTH)
-  }
-
-  function getRandomSpeed () {
-    const speeds = [2, 3, 4]
-    // return speeds[Math.floor(Math.random() * speeds.length)] * 2
-    return 3
   }
 
   function getShips () {
@@ -100,14 +89,14 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
       onComplete: () => {
         explosion.explode(ship.x, ship.y)
         ship.destroy()
+        createShip()
       }
     })
   }
 
   function update() {
-    moveShip(enemySmall, getRandomSpeed())
-    moveShip(enemyMedium, getRandomSpeed())
-    moveShip(enemyBig, getRandomSpeed())
+    enemies.children.entries
+      .forEach(ship => moveShip(ship, speed))
   }
 
   // functions and properties listed here will be public.
