@@ -26,8 +26,6 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     enemyBig = scene.add.sprite(450, 200, spriteConfig.ENEMY_BIG.KEY, 0)
       .setScale(2)
 
-    console.log(')))))', scene.anims.generateFrameNumbers(spriteConfig.ENEMY_SMALL.KEY, {}))
-
     createAnimation(enemySmall, spriteConfig.ENEMY_SMALL)
     createAnimation(enemyMedium, spriteConfig.ENEMY_MEDIUM)
     createAnimation(enemyBig, spriteConfig.ENEMY_BIG)
