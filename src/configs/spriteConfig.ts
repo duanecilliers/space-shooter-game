@@ -7,6 +7,7 @@ import playerShip from 'assets/images/ship.png'
 import enemySmall from 'assets/images/enemy-small.png'
 import enemyMedium from 'assets/images/enemy-medium.png'
 import enemyBig from 'assets/images/enemy-big.png'
+import explosion from 'assets/images/explosion.png'
 import spreakerOff from 'assets/images/speaker-off.png'
 import speaker from 'assets/images/speaker.png'
 
@@ -29,6 +30,7 @@ interface ISpriteConfig {
   ENEMY_SMALL: ISprite,
   ENEMY_MEDIUM: ISprite,
   ENEMY_BIG: ISprite,
+  EXPLOSION: ISprite,
   SPEAKER: ISprite;
   SPEAKER_OFF: ISprite;
 }
@@ -84,6 +86,14 @@ const spriteConfig: ISpriteConfig = {
     FRAME_CONFIG: {
       frameWidth: 32,
       frameHeight: 32
+    }
+  },
+  EXPLOSION: {
+    KEY: 'explosion',
+    PATH: explosion,
+    FRAME_CONFIG: {
+      frameWidth: 16,
+      frameHeight: 16
     }
   },
   SPEAKER: {
