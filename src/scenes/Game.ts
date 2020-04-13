@@ -8,6 +8,7 @@ import audioConfig from 'configs/audioConfig'
 import canListen from 'components/events/canListen'
 import isScene from 'components/isScene'
 import createState from 'utils/createState'
+import { center } from 'utils/align'
 
 /**
  * Responsible for delegating the various levels, holding the various core systems and such.
@@ -17,12 +18,31 @@ const Game = function GameFunc() {
   let audioManager
   let entities = List([])
   let UIScene
-  let background
+  let background: Phaser.GameObjects.Sprite
+  let stars: Phaser.GameObjects.Sprite
+  let planetCluster: Phaser.GameObjects.Image
+  let planet: Phaser.GameObjects.Image
+  let planet2: Phaser.GameObjects.Image
 
   function createBackground () {
-    background = state.getScene().add.sprite(0, 0, spriteConfig.BACKGROUND.KEY)
-    background.setDisplaySize(gameConfig.GAME.VIEWWIDTH, gameConfig.GAME.VIEWHEIGHT)
+    const scene: Phaser.Scene = state.getScene()
+    const { add, game } = scene
+    const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
+    // background
+    background = add.sprite(0, 0, spriteConfig.BACKGROUND.KEY)
+    background.setDisplaySize(VIEWWIDTH, VIEWHEIGHT)
     background.setOrigin(0, 0)
+    // stars
+    stars = add.sprite(0, 0, spriteConfig.STARS.KEY)
+    stars.setDisplaySize(VIEWWIDTH, VIEWWIDTH)
+    center(stars, game.config)
+    // planet cluster
+    planetCluster = add.image(0, 0, spriteConfig.PLANET_CLUSTER.KEY)
+    center(planetCluster, game.config)
+    // planet 1
+    planet = add.image(200, 150, spriteConfig.PLANET.KEY)
+    // planet 2
+    planet2 = add.image(350, 550, spriteConfig.PLANET2.KEY)
   }
 
   function createCoin() {
