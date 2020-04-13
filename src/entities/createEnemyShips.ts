@@ -1,5 +1,6 @@
-import { range } from 'ramda'
+import { range, empty } from 'ramda'
 import isGameEntity from 'components/entities/isGameEntity'
+import createExplosion from 'entities/createExplosion'
 import canEmit from 'components/events/canEmit'
 import hasPosition from 'components/hasPosition'
 import createState from 'utils/createState'
@@ -14,30 +15,35 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   let enemySmall: ISprite
   let enemyMedium: ISprite
   let enemyBig: ISprite
+  let enemies: Phaser.Physics.Arcade.Group
+  let explosion
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
   }
 
   function create () {
+    enemies = scene.physics.add.group()
     enemySmall = scene.add.sprite(150, 200, spriteConfig.ENEMY_SMALL.KEY, 0)
       .setScale(2)
-      .setInteractive()
 
     enemyMedium = scene.add.sprite(300, 200, spriteConfig.ENEMY_MEDIUM.KEY, 0)
       .setScale(2)
-      .setInteractive()
 
     enemyBig = scene.add.sprite(450, 200, spriteConfig.ENEMY_BIG.KEY, 0)
       .setScale(2)
-      .setInteractive()
 
-    scene.input.on('gameobjectdown', destroyShip, scene)
+    enemies.add(enemySmall)
+    enemies.add(enemyMedium)
+    enemies.add(enemyBig)
 
     createAnimation(enemySmall, spriteConfig.ENEMY_SMALL)
     createAnimation(enemyMedium, spriteConfig.ENEMY_MEDIUM)
     createAnimation(enemyBig, spriteConfig.ENEMY_BIG)
     createAnimation(enemyBig, spriteConfig.EXPLOSION, false, { repeat: 0, hideOnComplete: true })
+
+    explosion = createExplosion(scene)
+    explosion.create()
   }
 
   function createAnimation(
@@ -79,10 +85,13 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     return 3
   }
 
-  function destroyShip(pointer, ship: ISprite) {
-    const key = spriteConfig.EXPLOSION.KEY
-    ship.setTexture(key)
-    ship.play(`${key}_anim`)
+  function getShips () {
+    return enemies
+  }
+
+  function destroyShip (ship: Phaser.Physics.Arcade.Sprite) {
+    explosion.explode(ship.x, ship.y)
+    ship.destroy()
   }
 
   function update() {
@@ -99,6 +108,8 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     create,
     update,
     printInfo,
+    getShips,
+    destroyShip
   }
 
   // These are the substates, or components, that describe the functionality of the resulting object.
