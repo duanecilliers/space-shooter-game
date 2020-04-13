@@ -10,6 +10,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   const state: any = {}
   let ship: Phaser.GameObjects.Sprite
 
+
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
   }

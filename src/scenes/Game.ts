@@ -8,6 +8,7 @@ import isScene from 'components/isScene'
 import createState from 'utils/createState'
 import createEnemyShips from 'entities/createEnemyShips'
 import createBackground from 'entities/createBackground'
+import createPowerUps from 'entities/createPowerUps'
 
 /**
  * Responsible for delegating the various levels, holding the various core systems and such.
@@ -18,25 +19,29 @@ const Game = function GameFunc() {
   let entities = List([])
   let UIScene
   let background
+  let powerUps
   // let player
   let enemyShips
 
-  function cameraSetup() {
+  function _setupCamera() {
     state.getScene().cameras.main.setViewport(0, 0, gameConfig.GAME.VIEWWIDTH, gameConfig.GAME.VIEWHEIGHT)
     state.getScene().cameras.main.setZoom(0.8)
   }
 
-  function createPlayer () {
-    const scene = state.getScene()
-    const playerState = createPlayerShip(scene)
-    playerState.create(scene)
+  function _createPlayer () {
+    const playerState = createPlayerShip(state.getScene())
+    playerState.create()
     playerState.setPosition({ x: 200, y: 200 })
   }
 
-  function createEnemies () {
-    const scene = state.getScene()
-    enemyShips = createEnemyShips(scene)
-    enemyShips.create(scene)
+  function _createEnemies () {
+    enemyShips = createEnemyShips(state.getScene())
+    enemyShips.create()
+  }
+
+  function _createPowerUps () {
+    powerUps = createPowerUps(state.getScene())
+    powerUps.create()
   }
 
   function init() {
@@ -47,12 +52,15 @@ const Game = function GameFunc() {
   }
 
   function create() {
+    const scene: Phaser.Scene = state.getScene()
+    // scene.input.enabled = true
     audioManager.playMusic()
-    background = createBackground(state.getScene())
+    background = createBackground(scene)
     background.create()
-    createPlayer()
-    createEnemies()
-    cameraSetup()
+    _createPlayer()
+    _createEnemies()
+    _createPowerUps()
+    _setupCamera()
   }
 
   function update(time, delta) {

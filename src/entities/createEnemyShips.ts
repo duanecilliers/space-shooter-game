@@ -5,14 +5,16 @@ import createState from 'utils/createState'
 import spriteConfig from 'configs/spriteConfig'
 import gameConfig from 'configs/gameConfig'
 
-interface IShip extends Phaser.GameObjects.Sprite {}
+interface ISprite extends Phaser.GameObjects.Sprite {}
 
 const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
-  let enemySmall: IShip
-  let enemyMedium: IShip
-  let enemyBig: IShip
+  let enemySmall: ISprite
+  let enemyMedium: ISprite
+  let enemyBig: ISprite
+  let explosion: ISprite
+  let ships: ISprite[]
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
@@ -21,35 +23,57 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   function create () {
     enemySmall = scene.add.sprite(150, 200, spriteConfig.ENEMY_SMALL.KEY, 0)
       .setScale(2)
+      .setInteractive()
+      // .on('pointerdown', destroyShip.bind(enemySmall))
+
     enemyMedium = scene.add.sprite(300, 200, spriteConfig.ENEMY_MEDIUM.KEY, 0)
       .setScale(2)
+      .setInteractive()
+      // .on('pointerdown', destroyShip.bind(enemyMedium))
+
     enemyBig = scene.add.sprite(450, 200, spriteConfig.ENEMY_BIG.KEY, 0)
       .setScale(2)
+      .setInteractive()
+      // .on('pointerdown', destroyShip.bind(enemyBig))
+
+    // ships = [enemySmall, enemyMedium, enemyBig]
+    // ships.forEach(ship => ship.setInteractive())
+
+    scene.input.on('gameobjectdown', destroyShip, scene)
 
     createAnimation(enemySmall, spriteConfig.ENEMY_SMALL)
     createAnimation(enemyMedium, spriteConfig.ENEMY_MEDIUM)
     createAnimation(enemyBig, spriteConfig.ENEMY_BIG)
+    createAnimation(enemyBig, spriteConfig.EXPLOSION, false, { repeat: 0, hideOnComplete: true })
   }
 
-  function createAnimation(ship: IShip, shipConfig: any) {
+  function createAnimation(
+    ship: ISprite,
+    shipConfig: any,
+    play = true,
+    animConfig: Phaser.Types.Animations.Animation = {}
+  ) {
     const key = `${shipConfig.KEY}_anim`
     scene.anims.create({
       key,
       frames: scene.anims.generateFrameNumbers(shipConfig.KEY, {}),
       frameRate: 20,
-      repeat: -1
+      repeat: -1,
+      ...animConfig
     })
-    ship.anims.play(key)
+    if (play) {
+      ship.anims.play(key)
+    }
   }
 
-  function moveShip(ship: IShip, speed: number) {
+  function moveShip(ship: ISprite, speed: number) {
     ship.y += speed
     if (ship.y > gameConfig.GAME.VIEWHEIGHT) {
       resetShipPos(ship)
     }
   }
 
-  function resetShipPos(ship: IShip) {
+  function resetShipPos(ship: ISprite) {
     // console.log('resetShipPos', scene)
     ship.y = -50
     ship.x = Phaser.Math.Between(0, gameConfig.GAME.VIEWWIDTH)
@@ -59,6 +83,12 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     const speeds = [2, 3, 4]
     // return speeds[Math.floor(Math.random() * speeds.length)] * 2
     return 3
+  }
+
+  function destroyShip(pointer, ship: ISprite) {
+    const key = spriteConfig.EXPLOSION.KEY
+    ship.setTexture(key)
+    ship.play(`${key}_anim`)
   }
 
   function update() {

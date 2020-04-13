@@ -9,17 +9,23 @@ import resizeCanvas from 'utils/resizeCanvas'
 import createMessageBus from 'core/createMessageBus'
 import store from './store'
 
-const phaserConfig = {
+const phaserConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.WEBGL,
   width: gameConfig.GAME.VIEWWIDTH,
   height: gameConfig.GAME.VIEWHEIGHT,
   backgroundColor: '#555555',
   parent: 'game',
   scene: [BootScene().getScene(), LoadScene().getScene(), Game().getScene()],
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: false
+    }
+  }
 }
 
 store.messageBus = createMessageBus()
-const game = new Phaser.Game(phaserConfig)
+const game: Phaser.Game = new Phaser.Game(phaserConfig)
 
 window.onload = function () {
   window.addEventListener('resize', resizeCanvas)

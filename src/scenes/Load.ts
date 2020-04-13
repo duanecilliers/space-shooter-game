@@ -28,7 +28,6 @@ const LoadScene = function LoadSceneFunc() {
     Object.keys(spriteConfig)
       .filter(key => spriteConfig[key].FRAME_CONFIG !== undefined)
       .map(key => {
-        console.log('key', key)
         return key
       })
       .forEach(key => {
