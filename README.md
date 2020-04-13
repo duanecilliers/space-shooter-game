@@ -1,3 +1,3 @@
-# Phaser3 Functional TypeScript Boilerplate
+# Space Shooter
 
-Based on [Phaser3.Boilerplate](https://github.com/Sidaroth/Phaser3.Boilerplate). It's still under heavy development and is intended as a personal learning experiment, use at own risk.
+A simple game made with Phaser3. It's a still a WIP.
