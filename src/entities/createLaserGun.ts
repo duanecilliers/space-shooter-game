@@ -51,6 +51,7 @@ const createLaserGun = function createLaserGunFunc(
   function update () {
     // cleanup beams
     if (beams.length > 0 && beams[0].y < 32) {
+      beams[0].destroy()
       beams.shift()
     }
   }

@@ -1,3 +1,4 @@
+import { range } from 'ramda'
 import isGameEntity from 'components/entities/isGameEntity'
 import canEmit from 'components/events/canEmit'
 import hasPosition from 'components/hasPosition'
@@ -13,8 +14,6 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   let enemySmall: ISprite
   let enemyMedium: ISprite
   let enemyBig: ISprite
-  let explosion: ISprite
-  let ships: ISprite[]
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
@@ -24,20 +23,14 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
     enemySmall = scene.add.sprite(150, 200, spriteConfig.ENEMY_SMALL.KEY, 0)
       .setScale(2)
       .setInteractive()
-      // .on('pointerdown', destroyShip.bind(enemySmall))
 
     enemyMedium = scene.add.sprite(300, 200, spriteConfig.ENEMY_MEDIUM.KEY, 0)
       .setScale(2)
       .setInteractive()
-      // .on('pointerdown', destroyShip.bind(enemyMedium))
 
     enemyBig = scene.add.sprite(450, 200, spriteConfig.ENEMY_BIG.KEY, 0)
       .setScale(2)
       .setInteractive()
-      // .on('pointerdown', destroyShip.bind(enemyBig))
-
-    // ships = [enemySmall, enemyMedium, enemyBig]
-    // ships.forEach(ship => ship.setInteractive())
 
     scene.input.on('gameobjectdown', destroyShip, scene)
 
@@ -69,13 +62,14 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   function moveShip(ship: ISprite, speed: number) {
     ship.y += speed
     if (ship.y > gameConfig.GAME.VIEWHEIGHT) {
+      // set random delay
       resetShipPos(ship)
     }
   }
 
   function resetShipPos(ship: ISprite) {
     // console.log('resetShipPos', scene)
-    ship.y = -50
+    ship.y = -(Phaser.Math.Between(50, 300))
     ship.x = Phaser.Math.Between(0, gameConfig.GAME.VIEWWIDTH)
   }
 
