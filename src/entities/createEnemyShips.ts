@@ -80,10 +80,11 @@ const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
 
   function destroyShip (ship: Phaser.Physics.Arcade.Sprite) {
     explosion.explode(ship.x, ship.y)
+    ship.disableBody()
     scene.tweens.add({
       targets: ship,
       duration: 500,
-      angle: 270,
+      angle: Math.random() > .5 ? 30 : -30,
       x: ship.x - 10,
       y: ship.y - 10,
       onComplete: () => {
