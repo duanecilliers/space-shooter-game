@@ -8,7 +8,7 @@ import gameConfig from 'configs/gameConfig'
 const createPlayerShip = function createPlayerShipFunc() {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
-  let ship: Phaser.GameObjects.TileSprite
+  let ship: Phaser.GameObjects.Sprite
 
   function printInfo() {
     console.log(`name: %c${state.name}`, 'color: red')
@@ -17,13 +17,11 @@ const createPlayerShip = function createPlayerShipFunc() {
   function create (scene: Phaser.Scene) {
     const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
 
-    ship = scene.add.tileSprite(
+    ship = scene.add.sprite(
       VIEWWIDTH / 2,
       VIEWHEIGHT - 50,
-      16,
-      24,
       spriteConfig.PLAYER_SHIP.KEY,
-      1
+      0
     ).setScale(2)
   }
 

@@ -5,9 +5,9 @@ import createState from 'utils/createState'
 import spriteConfig from 'configs/spriteConfig'
 import gameConfig from 'configs/gameConfig'
 
-interface IShip extends Phaser.GameObjects.TileSprite {}
+interface IShip extends Phaser.GameObjects.Sprite {}
 
-const createEnemyShips = function createEnemyShipsFunc() {
+const createEnemyShips = function createEnemyShipsFunc(scene: Phaser.Scene) {
   // variables and functions here are private unless listed below in localState.
   const state: any = {}
   let enemySmall: IShip
@@ -18,13 +18,30 @@ const createEnemyShips = function createEnemyShipsFunc() {
     console.log(`name: %c${state.name}`, 'color: red')
   }
 
-  function create (scene: Phaser.Scene) {
-    enemySmall = scene.add.tileSprite(150, 200, 16, 16, spriteConfig.ENEMY_SMALL.KEY, 1)
+  function create () {
+    enemySmall = scene.add.sprite(150, 200, spriteConfig.ENEMY_SMALL.KEY, 0)
       .setScale(2)
-    enemyMedium = scene.add.tileSprite(300, 200, 32, 16, spriteConfig.ENEMY_MEDIUM.KEY, 1)
+    enemyMedium = scene.add.sprite(300, 200, spriteConfig.ENEMY_MEDIUM.KEY, 0)
       .setScale(2)
-    enemyBig = scene.add.tileSprite(450, 200, 32, 32, spriteConfig.ENEMY_BIG.KEY, 1)
+    enemyBig = scene.add.sprite(450, 200, spriteConfig.ENEMY_BIG.KEY, 0)
       .setScale(2)
+
+    console.log(')))))', scene.anims.generateFrameNumbers(spriteConfig.ENEMY_SMALL.KEY, {}))
+
+    createAnimation(enemySmall, spriteConfig.ENEMY_SMALL)
+    createAnimation(enemyMedium, spriteConfig.ENEMY_MEDIUM)
+    createAnimation(enemyBig, spriteConfig.ENEMY_BIG)
+  }
+
+  function createAnimation(ship: IShip, shipConfig: any) {
+    const key = `${shipConfig.KEY}_anim`
+    scene.anims.create({
+      key,
+      frames: scene.anims.generateFrameNumbers(shipConfig.KEY, {}),
+      frameRate: 20,
+      repeat: -1
+    })
+    ship.anims.play(key)
   }
 
   function moveShip(ship: IShip, speed: number) {

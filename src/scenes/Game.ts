@@ -34,8 +34,9 @@ const Game = function GameFunc() {
   }
 
   function createEnemies () {
-    enemyShips = createEnemyShips()
-    enemyShips.create(state.getScene())
+    const scene = state.getScene()
+    enemyShips = createEnemyShips(scene)
+    enemyShips.create(scene)
     // console.log('enemyState', enemyState)
   }
 
