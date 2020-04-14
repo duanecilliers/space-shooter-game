@@ -17,7 +17,9 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
   let projectiles: Phaser.Physics.Arcade.Group
   let explosion
   let animations: {
-    straightAnimation: string;
+    up: string;
+    left: string;
+    right: string
   }
 
   const { VIEWHEIGHT, VIEWWIDTH } = gameConfig.GAME
@@ -39,7 +41,7 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
       .setScale(2)
 
     animations = createAnimations()
-    ship.anims.play(animations.straightAnimation)
+    ship.anims.play(animations.up)
 
     ship.setCollideWorldBounds(true)
     cursorKeys = scene.input.keyboard.createCursorKeys()
@@ -57,18 +59,22 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
    * @todo add turning animations
    */
   function createAnimations () {
-    // move straight
-    const straightKey = `${spriteConfig.PLAYER_SHIP.KEY}_anim`
-    const straightframes = scene.anims.generateFrameNumbers(spriteConfig.PLAYER_SHIP.KEY, {})
-    scene.anims.create({
-      key: straightKey,
-      frames: [straightframes[2], straightframes[7]],
-      frameRate: 20,
-      repeat: -1
-    })
+    const createAnim = (spriteKey: string, animKey: string, frames: number[]) => {
+      const _animKey = `${spriteKey}_${animKey}`
+      const _frames = scene.anims.generateFrameNumbers(spriteKey, { frames })
+      scene.anims.create({
+        key: _animKey,
+        frames: _frames,
+        frameRate: 20,
+        repeat: -1
+      })
+      return _animKey
+    }
 
     return {
-      straightAnimation: straightKey
+      up: createAnim(spriteConfig.PLAYER_SHIP.KEY, 'up', [2, 7]),
+      left: createAnim(spriteConfig.PLAYER_SHIP.KEY, 'left', [0, 5]),
+      right: createAnim(spriteConfig.PLAYER_SHIP.KEY, 'right', [4, 9])
     }
   }
 
@@ -78,14 +84,32 @@ const createPlayerShip = function createPlayerShipFunc(scene: Phaser.Scene) {
 
     if (left.isDown) {
       ship.setVelocityX(-SPEED)
+      ship.anims.stop()
+      // flip directions if moving downwards
+      if (down.isDown) {
+        ship.anims.play(animations.right)
+      } else {
+        ship.anims.play(animations.left)
+      }
     } else if (right.isDown) {
       ship.setVelocityX(SPEED)
+      ship.anims.stop()
+      // flip directions if moving downwards
+      if (down.isDown) {
+        ship.anims.play(animations.left)
+      } else {
+        ship.anims.play(animations.right)
+      }
     } else if (up.isDown) {
       ship.setVelocityY(-SPEED)
     } else if (down.isDown) {
       ship.setVelocityY(SPEED)
+        .setAngle(180)
     } else {
-      ship.setVelocity(0, 0)
+      ship.setAngle(0)
+        .setVelocity(0, 0)
+      ship.anims.stop()
+      ship.anims.play(animations.up)
     }
   }
 
